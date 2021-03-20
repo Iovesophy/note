@@ -3,13 +3,15 @@ title: "FastAPIを使ってWebアプリを作ってみる:ver1" # 記事のタ�
 emoji: "💨" # アイキャッチとして使われる絵文字（1文字だけ）
 type: "tech" # tech: 技術記事 / idea: アイデア記事
 topics: ["python","FastAPI","Swagger"] # タグ。["markdown", "rust", "aws"]のように指定する
-published: false # 公開設定（falseにすると下書き）
+published: true # 公開設定（falseにすると下書き）
 ---
 
 # FastAPIを使ってWebアプリを作ってみる:ver1
 
 FastAPIを使うことになったので、導入をする際の自分用メモ。
-基本的にはFastAPIの公式ドキュメントを参考にしてます[^1]。
+最終的には、掲示板アプリを作るところまでやってみたいと思っています。
+
+今回は、基本的にはFastAPIの公式ドキュメントを参考にしてます[^1]。
 
 # FastAPIについて
 
@@ -37,21 +39,36 @@ $ pip3 install fastapi
 $ pip3 install uvicorn
 ```
 
-# hello world!を表示してみよう
+# Hello World !を表示してみよう
 
-お決まりのhello world!を表示してみたいと思います。
+お決まりのHello World !を表示してみたいと思います。
 まず、好きなエディターでmain.pyを作成します。
 
 ```python:main.py
 from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 
 app = FastAPI()
 
-
-@app.get("/")
+@app.get("/",response_class=HTMLResponse)
 def read_root():
-    return {"Hello": "World !"}
+    return """
+        <html>
+            <head>
+                <title>tutorial</title>
+            </head>
+            <body>
+                <h1>Hello World !</h1>
+            </body>
+        </html>
+        """
 ```
+
+まず、fastapiライブラリからFastAPIをインポートします。
+また、HTMLをレンダーしたいと思うので、fastapi.resposesライブラリからHTMLResposeをインポートします。
+
+ルーティングの書き方はとてもシンプルで、@appよりメソッドチェーンを通してgetリクエストを受け付けるインスタンスを生成し、パスを記述しルートのリクエストを受け付けます。
+直下にあるサブルーチンで処理を書きます。今回は「Hello World !」を表示するのみです。
 
 # 実行
 
@@ -61,9 +78,12 @@ $ uvicorn main:app --reload
 
 この--reloadというのは、ファイル更新等をした際にも再読み込みしてね、と明示するための引数である。
 
+以下は実行した様子↓
+![](https://storage.googleapis.com/zenn-user-upload/75laqcay25o0tu9moqy796btywyf)
+![](https://storage.googleapis.com/zenn-user-upload/d7vs452ydic88mkeijkndqxgd4xl)
 
-テスト投稿
-
+以上でhello World !の表示ができるところまでできた。
+次回は、getリクエスト以外のリクエストも書いてみます。
 
 [^1]: FastAPI https://fastapi.tiangolo.com/ja/
 [^2]: Web Server Gateway Interface https://ja.wikipedia.org/wiki/Web_Server_Gateway_Interface
