@@ -2,27 +2,27 @@
 title: "AWS 請求通知 BOT を AWS Lambda + AWS SDK + Go で作る~ SDK調査編 ~"
 emoji: "🕌"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["Go","AWS"]
+topics: ["Go", "AWS"]
 published: true
 ---
 
-# AWS 請求通知 BOT を AWS Lambda + AWS SDK + Go で作る ~ SDK調査編 ~
+# AWS 請求通知 BOT を AWS Lambda + AWS SDK + Go で作る ~ SDK 調査編 ~
 
 ## あらまし
 
-AWS　請求額が設定ミスで跳ね上がる事例が多々発生しがちです、その対策として、現在の請求額を通知する BOT を作るのも一つです。
+世の中に AWS 請求額が設定ミスで多額の請求が来てしまったという事故が多々見受けられる、その対策として、現在の請求額を通知する BOT を作るのも有効な対策手段の一つである。
 今回 Cost Explorer の SDK に関して個人的に調査を行った。
 
 ## Cost Explorer とは
 
-AWSのコストを可視化できます。
+AWS のコストを可視化できる。
 
 https://aws.amazon.com/jp/aws-cost-management/aws-cost-explorer
 
 #### 料金について
 
-Cost Explorer のユーザーインターフェイスを使用したコストと使用状況の表示は無料。 
-Cost Explorer API を使用して、プログラムでデータにアクセスすることもできます。 
+Cost Explorer のユーザーインターフェイスを使用したコストと使用状況の表示は無料。
+Cost Explorer API を使用して、プログラムでデータにアクセスすることもできる。
 
 API リクエストごとに $0.01$ USD の料金が発生する。
 
@@ -37,7 +37,7 @@ API リクエストごとに $1.2369$ 円 の料金が発生する。
 
 $$1.2369 \times 30 = 37.107$$
 
-一ヶ月(30日と仮定)約 $37.107$ 円程度の料金が発生する。
+一ヶ月(30 日と仮定)約 $37.107$ 円程度の料金が発生する。
 
 ## Cost Explorer の SDK
 
@@ -49,7 +49,7 @@ https://docs.amazonaws.cn/sdk-for-go/api/service/costexplorer/#CostExplorer
 
 ## USD しか取れない問題
 
-USD ベースの rate がとれる API 「OpenExchangeRates」 を利用してUSDをJPYに変換する。
+USD ベースの rate がとれる API 「OpenExchangeRates」 を利用して USD を JPY に変換する。
 
 https://docs.openexchangerates.org/docs
 
@@ -59,9 +59,9 @@ https://docs.openexchangerates.org/docs
 
 ![スクリーンショット 2022-04-05 13.56.57.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/1009976/7530dbd4-9e04-c001-f490-8b2ff97b47ec.png)
 
-使い方は非常にシンプルで、app_id をクエリパラメータに与えて Get リクエストを投げるだけ。
+使い方は非常にシンプルで、app_id をクエリパラメータに与えて Get リクエストを投げるのみで良い。
 
-Go言語で実装した例
+Go 言語で実装した例
 app_id は ssm パラメータストア等の SecureString を利用。
 
 ```Go
@@ -127,9 +127,9 @@ AWS コストの粒度を MONTHLY、DAILY、または HOURLY で設定できる�
 
 #### GroupBy
 
-AWSコストは、最大2つの異なるグループ (ディメンション、タグキー、コストカテゴリ、またはタイプ別の2つのグループ) を使用してグループ化できる。
+AWS コストは、最大 2 つの異なるグループ (ディメンション、タグキー、コストカテゴリ、またはタイプ別の 2 つのグループ) を使用してグループ化できる。
 
-DIMENSIONタイプの有効な値は、
+DIMENSION タイプの有効な値は、
 
 AZ、
 INSTANCE_TYPE、
@@ -156,11 +156,11 @@ OPERATION に関しては オペレーション毎の情報（例えば RunInsta
 PLATFORM に関しては プラットフォーム毎の情報
 PURCHASE_TYPE に関しては オンデマンド、リザーブド、saving 等のプラン毎の情報
 SERVICE に関しては サービス毎の情報
-TENANCY に関しては (例えば、Sharedなど)
-RECORD_TYPE に関しては (例えば、DiscountedUsage,Taxなど)
-USAGE_TYPE に関しては (例えば、APS1-EUN1-AWS-Out-Bytesなど)
+TENANCY に関しては (例えば、Shared など)
+RECORD_TYPE に関しては (例えば、DiscountedUsage,Tax など)
+USAGE_TYPE に関しては (例えば、APS1-EUN1-AWS-Out-Bytes など)
 
-等のキーを指定可能で1回の呼び出しで2つまで指定可能。
+等のキーを指定可能で 1 回の呼び出しで 2 つまで指定可能。
 
 このパラメータは必須ではない。
 
@@ -195,7 +195,7 @@ AWS コストを取得するための開始日と終了日を設定できる。
 
 このパラメータももちろん必須。
 
-# Goでの実装
+# Go での実装
 
 通知予定の部分
 
@@ -336,9 +336,8 @@ func main() {
 
 # まとめ
 
-今回は SDK の検証まででした。
-AWS を利用したサービス設計時、ある程度正しい見積もりができないと大きな損害を生む可能性があるので、信用を失うことになりかねないです。
-AWS の料金体系に関して、今後も継続して勉強を続けていこうと思いました。
+今回は SDK の検証まで行った。
+AWS を利用したサービス設計時、ある程度正しい見積もりができないと大きな損害を生む可能性があるので、信用を失うことになりかねない。
+AWS の料金体系に関して、今後も継続して勉強を続けていこうと思う。
 
-次回は、Lambda を立てて実際に通知まで行きたいと思います。
-
+次回は、Lambda を立てて実際に通知まで実装してデプロイする。
