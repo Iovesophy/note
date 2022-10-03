@@ -2,7 +2,7 @@
 title: "Moodle Data manipulation API 覚書"
 emoji: "📝"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: [Moodle, SQL]
+topics: ["Moodle", "SQL"]
 published: true
 ---
 
